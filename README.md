@@ -331,6 +331,32 @@ oc get applications -n openshift-gitops -w
 oc get csv -A --watch
 ```
 
+### 9 — View service URLs and credentials
+
+Once all Applications show **Synced / Healthy** (~20–40 min), run the helper script to print the console URL and credentials for every deployed service:
+
+```bash
+./bootstrap/scripts/show-platform-urls.sh
+```
+
+The script queries the cluster live and prints a formatted summary covering:
+
+| # | Service | What it shows |
+|---|---------|---------------|
+| 1 | OCP GitOps (Argo CD) | Console URL · admin password |
+| 2 | Cert Manager | Installed CSV · status command |
+| 3 | MLflow | URL via `data-science-gateway` route (`/mlflow` path) |
+| 4 | Grafana | Console URL · admin username + password |
+| 5 | RHSSO (Keycloak) | Admin console URL · admin username + password |
+| 6 | RustFS | S3 API URL · access key · secret key |
+| 7 | Vault | UI URL · root token · unseal key |
+| 8 | RHOAI Dashboard | Dashboard URL · auth method |
+| 9 | Model Registry | Route URL · auth method |
+
+A summary table of all URLs is printed at the end.
+
+> **Requirements:** `oc` CLI, logged in with cluster-admin rights.
+
 ---
 
 ## Project Structure
@@ -340,7 +366,8 @@ oc get csv -A --watch
 ├── bootstrap/                        # Terraform — run once to seed the cluster
 │   ├── scripts/
 │   │   ├── validate-tfvars.sh        # Validates terraform.tfvars before apply
-│   │   └── check-cluster-prereqs.sh  # Checks OCP version, permissions, capacity
+│   │   ├── check-cluster-prereqs.sh  # Checks OCP version, permissions, capacity
+│   │   └── show-platform-urls.sh     # Lists URLs + credentials for all deployed services
 │   ├── versions.tf
 │   ├── variables.tf
 │   ├── main.tf                       # Preflight + GitOps operator + ApplicationSet
