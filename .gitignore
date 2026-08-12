@@ -20,3 +20,7 @@ bootstrap/.rendered/
 # Claude Code context (lives in workspace .claude/ outside this repo)
 CLAUDE.md
 .claude/
+
+# Terraform state (never commit)
+*.tfstate
+*.tfstate.*
